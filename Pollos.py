@@ -1,17 +1,40 @@
-class pollos:
-    #metodo constructor 
-    def __init__(self, id_pollo, dato_edad):
-        self.codigo_pollo = id_pollo
-        self.dato_edad = dato_edad
-        #llamados de otras clases 
-        self.objeto_datos = base_datos() #el objeto de la clase 
+# Pollos.py
+class Pollo:
+    def __init__(self, codigo, raza, edad):
+        self.__codigo = codigo
+        self.__raza = raza
+        self.__edad = edad
+        self.__produccion_huevos = {} 
 
-#metodo publico de modificacion atributo
-    def getCodigo_pollo(self):
-        return self.codigo_pollo
-    
-    def setCodigo_pollo(self, codigo_pollo):
-        self.codigo_pollo = codigo_pollo
+ 
+    def get_codigo(self):
+        return self.__codigo
 
-#metodos para conextar base datos
-def guardar_pollo(self):
+    def get_raza(self):
+        return self.__raza
+
+    def get_edad(self):
+        return self.__edad
+
+    def get_produccion(self):
+        return self.__produccion_huevos
+
+ 
+    def set_codigo(self, codigo):
+        self.__codigo = codigo
+
+    def set_raza(self, raza):
+        self.__raza = raza
+
+    def set_edad(self, edad):
+        self.__edad = edad
+
+   
+    def registrar_huevos(self, semana, cantidad):
+        self.__produccion_huevos[semana] = cantidad
+
+    def obtener_produccion_semanal(self, semana):
+        return self.__produccion_huevos.get(semana, 0)
+
+    def obtener_produccion_total(self):
+        return sum(self.__produccion_huevos.values())
