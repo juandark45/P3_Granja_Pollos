@@ -3,8 +3,7 @@ from Pollos import Pollo
 
 class BaseDatos(ICrud):
     def __init__(self):
-        self.pollos = {}  # clave: codigo, valor: objeto Pollo
-
+        self.pollos = {} 
     def crear_pollo(self, pollo):
         if pollo.get_codigo() in self.pollos:
             print("[!] El pollo ya existe.")
