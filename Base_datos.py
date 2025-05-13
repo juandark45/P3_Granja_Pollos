@@ -3,103 +3,56 @@ from Pollos import Pollo
 
 class BaseDatos(ICrud):
     def __init__(self):
-        self.pollos = {}
+        self.pollos = {}  # clave: codigo, valor: objeto Pollo
 
     def crear_pollo(self, pollo):
-        if pollo.codigo in self.pollos:
-            print("Ya existe un pollo con ese código.")
+        if pollo.get_codigo() in self.pollos:
+            print("[!] El pollo ya existe.")
         else:
-            self.pollos[pollo.codigo] = pollo
-            print("Pollo registrado.")
+            self.pollos[pollo.get_codigo()] = pollo
+            print("[+] Pollo registrado correctamente.")
 
     def leer_pollo(self, codigo):
-        return self.pollos.get(codigo)
+        pollo = self.pollos.get(codigo)
+        if pollo:
+            print(f"\nCódigo: {pollo.get_codigo()}\nRaza: {pollo.get_raza()}\nEdad: {pollo.get_edad()}\nProducción Total: {pollo.obtener_produccion_total()} huevos\n")
+        else:
+            print("[!] Pollo no encontrado.")
 
     def actualizar_pollo(self, codigo, **kwargs):
         pollo = self.pollos.get(codigo)
         if pollo:
-            if 'raza' in kwargs and kwargs['raza']:
-                pollo.raza = kwargs['raza']
-            if 'edad' in kwargs and kwargs['edad']:
-                pollo.edad = kwargs['edad']
-            print("Pollo actualizado.")
+            if 'codigo' in kwargs:
+                nuevo_codigo = kwargs['codigo']
+                pollo.set_codigo(nuevo_codigo)
+                self.pollos[nuevo_codigo] = pollo
+                del self.pollos[codigo]
+            if 'raza' in kwargs:
+                pollo.set_raza(kwargs['raza'])
+            if 'edad' in kwargs:
+                pollo.set_edad(kwargs['edad'])
+            print("[*] Pollo actualizado.")
         else:
-            print("Pollo no encontrado.")
+            print("[!] Pollo no encontrado.")
 
     def eliminar_pollo(self, codigo):
         if codigo in self.pollos:
             del self.pollos[codigo]
-            print("Pollo eliminado.")
+            print("[-] Pollo eliminado.")
         else:
-            print("Pollo no encontrado.")
+            print("[!] Pollo no encontrado.")
 
     def registrar_produccion(self, codigo, semana, cantidad):
-        pollo = self.leer_pollo(codigo)
-        if pollo:
-            pollo.registrar_huevos(semana, cantidad)
-            print("Producción registrada.")
-        else:
-            print("Pollo no encontrado.")
-
-    def mostrar_todos(self):
-        if not self.pollos:
-            print("No hay pollos registrados.")
-        for pollo in self.pollos.values():
-            print(f"\nCódigo: {pollo.codigo}")
-            print(f"Raza: {pollo.raza}")
-            print(f"Edad: {pollo.edad}")
-            print(f"Producción total: {pollo.obtener_produccion_total()} huevos")
-            for semana, cant in pollo.produccion_huevos.items():
-                print(f"  Semana {semana}: {cant} huevos")from interfase import ICrud
-from Pollos import Pollo
-
-class BaseDatos(ICrud):
-    def __init__(self):
-        self.pollos = {}
-
-    def crear_pollo(self, pollo):
-        if pollo.codigo in self.pollos:
-            print("Ya existe un pollo con ese código.")
-        else:
-            self.pollos[pollo.codigo] = pollo
-            print("Pollo registrado.")
-
-    def leer_pollo(self, codigo):
-        return self.pollos.get(codigo)
-
-    def actualizar_pollo(self, codigo, **kwargs):
         pollo = self.pollos.get(codigo)
         if pollo:
-            if 'raza' in kwargs and kwargs['raza']:
-                pollo.raza = kwargs['raza']
-            if 'edad' in kwargs and kwargs['edad']:
-                pollo.edad = kwargs['edad']
-            print("Pollo actualizado.")
-        else:
-            print("Pollo no encontrado.")
-
-    def eliminar_pollo(self, codigo):
-        if codigo in self.pollos:
-            del self.pollos[codigo]
-            print("Pollo eliminado.")
-        else:
-            print("Pollo no encontrado.")
-
-    def registrar_produccion(self, codigo, semana, cantidad):
-        pollo = self.leer_pollo(codigo)
-        if pollo:
             pollo.registrar_huevos(semana, cantidad)
-            print("Producción registrada.")
+            print("[+] Producción registrada.")
         else:
-            print("Pollo no encontrado.")
+            print("[!] Pollo no encontrado.")
 
     def mostrar_todos(self):
         if not self.pollos:
-            print("No hay pollos registrados.")
-        for pollo in self.pollos.values():
-            print(f"\nCódigo: {pollo.codigo}")
-            print(f"Raza: {pollo.raza}")
-            print(f"Edad: {pollo.edad}")
-            print(f"Producción total: {pollo.obtener_produccion_total()} huevos")
-            for semana, cant in pollo.produccion_huevos.items():
-                print(f"  Semana {semana}: {cant} huevos")
+            print("[!] No hay pollos registrados.")
+        else:
+            for codigo, pollo in self.pollos.items():
+                print(f"Código: {pollo.get_codigo()}, Raza: {pollo.get_raza()}, Edad: {pollo.get_edad()}, Total Huevos: {pollo.obtener_produccion_total()}")
